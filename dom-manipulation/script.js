@@ -31,6 +31,12 @@ function showRandomQuote() {
 
 document.getElementById("newQuote").addEventListener("click", showRandomQuote);
 
+document.getElementById("exportQuotes").addEventListener("click", exportToJson);
+
+document
+  .getElementById("importFile")
+  .addEventListener("change", importFromJsonFile);
+
 function addQuote() {
   const quoteText = document.getElementById("newQuoteText").value.trim();
   const quoteCategory = document
@@ -49,30 +55,6 @@ function addQuote() {
   alert("Quote added successfully!");
 }
 
-function createAddQuoteForm() {
-  const formDiv = document.createElement("div");
-
-  const inputText = document.createElement("input");
-  inputText.id = "newQuoteText";
-  inputText.type = "text";
-  inputText.placeholder = "Enter a new quote";
-
-  const inputCategory = document.createElement("input");
-  inputCategory.id = "newQuoteCategory";
-  inputCategory.type = "text";
-  inputCategory.placeholder = "Enter quote category";
-
-  const addButton = document.createElement("button");
-  addButton.textContent = "Add Quote";
-  addButton.addEventListener("click", addQuote);
-
-  formDiv.appendChild(inputText);
-  formDiv.appendChild(inputCategory);
-  formDiv.appendChild(addButton);
-
-  document.body.appendChild(formDiv);
-}
-
 function exportToJson() {
   const dataStr =
     "data:text/json;charset=utf-8," +
@@ -84,22 +66,6 @@ function exportToJson() {
   downloadAnchor.click();
   document.body.removeChild(downloadAnchor);
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  createAddQuoteForm();
-  showRandomQuote();
-
-  const exportButton = document.createElement("button");
-  exportButton.textContent = "Export Quotes";
-  exportButton.addEventListener("click", exportToJson);
-  document.body.appendChild(exportButton);
-
-  const importInput = document.createElement("input");
-  importInput.type = "file";
-  importInput.accept = ".json";
-  importInput.addEventListener("change", importFromJsonFile);
-  document.body.appendChild(importInput);
-});
 
 function importFromJsonFile(event) {
   const fileReader = new FileReader();
