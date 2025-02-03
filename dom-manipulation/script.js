@@ -137,3 +137,33 @@ function restoreFilter() {
 
 populateCategories();
 restoreFilter();
+
+const serverUrl = "https://jsonplaceholder.typicode.com/posts";
+
+function fetchServerQuotes() {
+  fetch(serverUrl)
+    .then((response) => response.json())
+    .then((data) => {
+      const serverQuotes = data.map((post) => ({
+        text: post.body,
+        category: post.title,
+      }));
+      syncQuotesWithServer(serverQuotes);
+    })
+    .catch((error) => console.error("Error fetching server data:", error));
+}
+
+setInterval(fetchServerQuotes, 10000);
+
+function syncQuotesWithServer(serverQuotes) {
+  const localQuotes = JSON.parse(localStorage.getItem("quotes")) || [];
+
+  const mergedQuotes = [...serverQuotes, ...localQuotes];
+  localStorage.setItem("quotes", JSON.stringify(mergedQuotes));
+  populateCategories();
+  alert("Data synchronized with server.");
+}
+
+function resolveConflict(localQuote, serverQuote) {
+  return serverQuote;
+}
