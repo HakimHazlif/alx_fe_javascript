@@ -140,7 +140,7 @@ restoreFilter();
 
 const serverUrl = "https://jsonplaceholder.typicode.com/posts";
 
-function fetchServerQuotes() {
+function fetchQuotesFromServer() {
   fetch(serverUrl)
     .then((response) => response.json())
     .then((data) => {
@@ -153,7 +153,7 @@ function fetchServerQuotes() {
     .catch((error) => console.error("Error fetching server data:", error));
 }
 
-setInterval(fetchServerQuotes, 10000);
+setInterval(fetchQuotesFromServer, 10000);
 
 function syncQuotesWithServer(serverQuotes) {
   const localQuotes = JSON.parse(localStorage.getItem("quotes")) || [];
@@ -165,5 +165,6 @@ function syncQuotesWithServer(serverQuotes) {
 }
 
 function resolveConflict(localQuote, serverQuote) {
+  // Simple strategy: server data takes precedence
   return serverQuote;
 }
