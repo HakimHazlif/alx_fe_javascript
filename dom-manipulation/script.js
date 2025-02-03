@@ -140,22 +140,23 @@ restoreFilter();
 
 const serverUrl = "https://jsonplaceholder.typicode.com/posts";
 
-function fetchQuotesFromServer() {
-  fetch(serverUrl)
-    .then((response) => response.json())
-    .then((data) => {
-      const serverQuotes = data.map((post) => ({
-        text: post.body,
-        category: post.title,
-      }));
-      syncQuotesWithServer(serverQuotes);
-    })
-    .catch((error) => console.error("Error fetching server data:", error));
+async function fetchQuotesFromServer() {
+  try {
+    const response = await fetch(serverUrl);
+    const data = await response.json();
+    const serverQuotes = data.map((post) => ({
+      text: post.body,
+      category: post.title,
+    }));
+    await syncQuotesWithServer(serverQuotes);
+  } catch (error) {
+    console.error("Error fetching server data:", error);
+  }
 }
 
 setInterval(fetchQuotesFromServer, 10000);
 
-function syncQuotesWithServer(serverQuotes) {
+async function syncQuotesWithServer(serverQuotes) {
   const localQuotes = JSON.parse(localStorage.getItem("quotes")) || [];
 
   const mergedQuotes = [...serverQuotes, ...localQuotes];
@@ -164,7 +165,6 @@ function syncQuotesWithServer(serverQuotes) {
   alert("Data synchronized with server.");
 }
 
-function resolveConflict(localQuote, serverQuote) {
-  // Simple strategy: server data takes precedence
+async function resolveConflict(localQuote, serverQuote) {
   return serverQuote;
 }
