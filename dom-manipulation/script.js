@@ -162,7 +162,7 @@ async function syncQuotesWithServer(serverQuotes) {
   const mergedQuotes = [...serverQuotes, ...localQuotes];
   localStorage.setItem("quotes", JSON.stringify(mergedQuotes));
   populateCategories();
-  alert("Data synchronized with server.");
+  alert("Quotes synced with server!");
 }
 
 async function postQuoteToServer(quote) {
