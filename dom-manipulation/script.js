@@ -165,6 +165,46 @@ async function syncQuotesWithServer(serverQuotes) {
   alert("Data synchronized with server.");
 }
 
-async function resolveConflict(localQuote, serverQuote) {
+async function postQuoteToServer(quote) {
+  const response = await fetch(serverUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(quote),
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    console.log("Quote posted to server:", data);
+  } else {
+    console.error("Failed to post quote to server");
+  }
+}
+
+async function addQuote() {
+  const quoteText = document.getElementById("newQuoteText").value.trim();
+  const quoteCategory = document
+    .getElementById("newQuoteCategory")
+    .value.trim();
+
+  if (quoteText === "" || quoteCategory === "") {
+    alert("Please enter both a quote and a category.");
+    return;
+  }
+
+  const newQuote = { text: quoteText, category: quoteCategory };
+  quotes.push(newQuote);
+
+  await postQuoteToServer(newQuote);
+
+  saveQuotes();
+  populateCategories();
+  document.getElementById("newQuoteText").value = "";
+  document.getElementById("newQuoteCategory").value = "";
+  alert("Quote added and posted to server!");
+}
+
+function resolveConflict(localQuote, serverQuote) {
   return serverQuote;
 }
